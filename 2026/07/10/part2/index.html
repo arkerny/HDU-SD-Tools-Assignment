@@ -1,0 +1,213 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/><link rel="preload" as="image" href="https://files.seeusercontent.com/2026/02/14/M5kz/ae09871.png"/><meta name="generator" content="Hexo 8.1.2"/><meta name="hexo-theme" content="https://github.com/chiyuki0325/hexo-theme-stellaris/tree/2.3.5"/><meta http-equiv="X-DNS-Prefetch-Control" content="on"/><link rel="dns-prefetch" href="https://fastly.jsdelivr.net"/><link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin="true"/><meta name="renderer" content="webkit"/><meta name="force-rendering" content="webkit"/><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/><meta name="HandheldFriendly" content="true"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta name="theme-color" media="(prefers-color-scheme: light) and (max-width: 667px)" content="#eff4f9"/><meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8f8f8"/><meta name="theme-color" media="(prefers-color-scheme: dark) and (max-width: 667px)" content="#000000"/><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#202020"/><meta name="darkreader-lock"/><title>第二部分 虚拟机与 ssh - 软件开发工具实践</title><meta property="og:image" content="https://assignment.akn.moe/images/Pasted%20image%2020260708151857.png"/><meta property="og:image" content="https://assignment.akn.moe/images/Pasted%20image%2020260708152033.png"/><meta property="og:image" content="https://assignment.akn.moe/images/Pasted%20image%2020260708152858.png"/><meta property="og:image" content="https://assignment.akn.moe/images/Pasted%20image%2020260708153845.png"/><meta property="og:image" content="https://assignment.akn.moe/images/Pasted%20image%2020260708154335.png"/><meta property="og:image" content="https://assignment.akn.moe/images/Pasted%20image%2020260708154454.png"/><meta property="og:image" content="https://assignment.akn.moe/images/Pasted%20image%2020260708155040.png"/><meta property="og:image" content="https://assignment.akn.moe/images/Pasted%20image%2020260708184525.png"/><meta property="og:image" content="https://assignment.akn.moe/images/Pasted%20image%2020260708190835.png"/><meta property="og:image" content="https://assignment.akn.moe/images/Pasted%20image%2020260708185518.png"/><meta property="og:image" content="https://assignment.akn.moe/images/Pasted%20image%2020260708185552.png"/><meta property="og:image" content="https://assignment.akn.moe/images/Pasted%20image%2020260708190129.png"/><meta property="og:image" content="https://assignment.akn.moe/images/Pasted%20image%2020260708191117.png"/><meta property="og:image" content="https://assignment.akn.moe/images/Pasted%20image%2020260709172534.png"/><meta property="og:image" content="https://assignment.akn.moe/images/Pasted%20image%2020260709173929.png"/><meta property="og:type" content="article"/><meta property="og:title" content="第二部分 虚拟机与 ssh"/><meta property="og:url" content="https://assignment.akn.moe/2026/07/10/part2/index.html"/><meta property="og:site_name" content="软件开发工具实践"/><meta property="og:description" content="一、知识储备1、虚拟机与 Docker虚拟机（VM）和 Docker（容器化技术）是目前最主流的两种架构隔离技术。它们最核心的区别在于隔离的层次不同：虚拟机是在硬件层面进行虚拟化，而 Docker 是在操作系统层面进行隔离，其优缺点如下。     虚拟机 Docker    核心原理 在物理硬件上虚拟出完整的硬件资源，并在其上运行独立的 Guest OS。 共享宿主机的操作系统内核，实现进程级别的"/><meta property="og:locale" content="zh_CN"/><meta property="article:modified_time" content="2026-07-10T09:12:40.325Z"/><meta property="article:author" content="arkerny"/><meta property="twitter:card" content="summary"/><meta property="twitter:image" content="https://assignment.akn.moe/images/Pasted%20image%2020260708151857.png"/><meta name="description" content="一、知识储备1、虚拟机与 Docker虚拟机（VM）和 Docker（容器化技术）是目前最主流的两种架构隔离技术。它们最核心的区别在于隔离的层次不同：虚拟机是在硬件层面进行虚拟化，而 Docker 是在操作系统层面进行隔离，其优缺点如下。
+
+
+
+
+虚拟机
+Docker
+
+
+
+核心原理
+在物理硬..."/><link rel="stylesheet" href="/css/main.css"/></head><body><div class="l_body" id="start"><aside class="l_left" layout="post"><header class="header "><div class="logo-wrap"><a class="title" href="/"><div class="main" ff="title">软件开发工具实践</div></a></div><nav class="menu dis-select "></nav></header><div class="widgets"><div class="widget-wrapper toc single" id="toc"><div class="widget-header cap dis-select"><span class="name">第二部分 虚拟机与 ssh</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%9F%A5%E8%AF%86%E5%82%A8%E5%A4%87"><span class="toc-text">一、知识储备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%8E-Docker"><span class="toc-text">1、虚拟机与 Docker</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%9E%E9%AA%8C"><span class="toc-text">二、虚拟机实验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%90%AD%E5%BB%BA%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83"><span class="toc-text">1、搭建实验环境</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E5%AE%89%E8%A3%85-Docker-%E7%8E%AF%E5%A2%83"><span class="toc-text">（1）安装 Docker 环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%AE%89%E8%A3%85%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F"><span class="toc-text">（2）安装容器镜像</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81Docker-%E5%AE%B9%E5%99%A8%E7%9A%84%E7%BD%91%E7%BB%9C"><span class="toc-text">2、Docker 容器的网络</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81SSH-%E5%AE%9E%E9%AA%8C"><span class="toc-text">三、SSH 实验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E9%85%8D%E7%BD%AE-ssh-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">1、配置 ssh 服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%BB%BA%E7%AB%8B-ssh-%E8%BF%9E%E6%8E%A5"><span class="toc-text">2、建立 ssh 连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93"><span class="toc-text">3、文件传输</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E4%BD%BF%E7%94%A8-SCP-%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6"><span class="toc-text">（1）使用 SCP 传输文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E4%BD%BF%E7%94%A8-rsync-%E5%90%8C%E6%AD%A5%E6%96%87%E4%BB%B6"><span class="toc-text">（2）使用 rsync 同步文件</span></a></li></ol></li></ol></li></ol></div></div></div></div></aside><div class="l_main"><div><link rel="preload" as="image" href="/images/wechat.svg"/><link rel="preload" as="image" href="/images/weibo.svg"/><link rel="preload" as="image" href="/images/telegram.svg"/><link rel="preload" as="image" href="/images/email.svg"/><link rel="preload" as="image" href="/images/link_icon.svg"/><link rel="preload" as="image" href="https://api.qrserver.com/v1/create-qr-code/?size=256x256&amp;data=https://assignment.akn.moe/2026/07/10/part2/"/><div class="bread-nav fs12"><div class="left"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a></div><div id="post-meta"><span>发布于 <time dateTime="2026-07-10T08:49:57.000Z">2026-07-10</time>，更新于 <time dateTime="2026-07-10T09:12:40.325Z">2026-07-10</time></span><span id="outdated"></span></div></div></div><article class="md-text content post  " id="第二部分 虚拟机与 ssh"><h1 class="article-title"><span>第二部分 虚拟机与 ssh</span></h1><div><h2 id="一、知识储备"><a href="#一、知识储备" class="headerlink" title="一、知识储备"></a>一、知识储备</h2><h3 id="1、虚拟机与-Docker"><a href="#1、虚拟机与-Docker" class="headerlink" title="1、虚拟机与 Docker"></a>1、虚拟机与 Docker</h3><p>虚拟机（VM）和 <code>Docker</code>（容器化技术）是目前最主流的两种架构隔离技术。它们最核心的区别在于隔离的层次不同：虚拟机是在硬件层面进行虚拟化，而 <code>Docker</code> 是在操作系统层面进行隔离，其优缺点如下。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>虚拟机</strong></th>
+<th><strong><code>Docker</code></strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>核心原理</strong></td>
+<td>在物理硬件上虚拟出完整的硬件资源，并在其上运行独立的 Guest OS。</td>
+<td>共享宿主机的操作系统内核，实现进程级别的隔离。</td>
+</tr>
+<tr>
+<td><strong>启动速度</strong></td>
+<td>慢，需要像物理机一样经历系统引导和加载过程。</td>
+<td>快。</td>
+</tr>
+<tr>
+<td><strong>资源占用</strong></td>
+<td>高。每个虚拟机都需要单独分配内存、磁盘空间和 CPU 核心。</td>
+<td>低。镜像体积小，共享宿主机内存，按需分配。</td>
+</tr>
+<tr>
+<td><strong>应用场景</strong></td>
+<td>彻底隔离不同的业务<br>需要运行不同操作系统内核的任务<br>传统的重型单体应用部署</td>
+<td>微服务架构部署<br>CI &#x2F; CD 持续集成与持续交付<br>开发、测试、生产环境的快速同步与打包</td>
+</tr>
+</tbody></table>
+<p>虽然 Docker 并不是传统意义上的虚拟机，但是 <code>Docker</code> 的高并发、快速部署、轻量化和节省服务器成本等特点使其在软件开发中应用十分普遍，在一线大厂等也非常流行使用 <code>Docker</code> 容器。</p>
+<p>此外 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/wsl/">WSL(Windows SubSystem for Linux)</a> 让用户可以在 Windows 计算机上直接运行 Linux 环境，而无需单独的虚拟机或双重启动，提供了非常可用的 Linux 环境，也是非常不错的非传统虚拟机方案。</p>
+<h2 id="二、虚拟机实验"><a href="#二、虚拟机实验" class="headerlink" title="二、虚拟机实验"></a>二、虚拟机实验</h2><p>我们选用 <code>Docker</code> 运行 <code>Debain</code> 容器来进行实验。</p>
+<h3 id="1、搭建实验环境"><a href="#1、搭建实验环境" class="headerlink" title="1、搭建实验环境"></a>1、搭建实验环境</h3><p>实验系统环境在前文有提及，不再赘述。</p>
+<h4 id="（1）安装-Docker-环境"><a href="#（1）安装-Docker-环境" class="headerlink" title="（1）安装 Docker 环境"></a>（1）安装 <code>Docker</code> 环境</h4><p>我们使用 <code>Docker</code> 提供的图形化应用 <a target="_blank" rel="noopener" href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a>。<br>点击蓝色按钮下载安装即可。</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/Pasted%20image%2020260708151857.png"/></div></div>
+<p>由于笔者已经安装完成，安装过程于此不再赘述，安装完毕以后，我们就可以使用 <code>Docker</code> 了。</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/Pasted%20image%2020260708152033.png"/></div></div>
+<p><code>Docker</code> 本身十分具有可玩性，例如我们可以自己创建一个实验报告文档的镜像，便于分发与部署。在此我们先完成基本的 Linux 实验。</p>
+<h4 id="（2）安装容器镜像"><a href="#（2）安装容器镜像" class="headerlink" title="（2）安装容器镜像"></a>（2）安装容器镜像</h4><p>打开终端，查看 <code>Docker</code> 版本（验证是否安装成功），并且拉取和查看 <code>Debian</code> 的镜像。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker --version</span><br><span class="line">docker pull debian:latest</span><br><span class="line">docker images</span><br></pre></td></tr></table></figure>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/Pasted%20image%2020260708152858.png"/></div></div>
+<p>可以看到已经拉取完毕。<br>我们下面开始运行这个镜像，并授予管理员权限。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -t --name hdu-sd-tools --privileged=<span class="literal">true</span> debian:latest</span><br></pre></td></tr></table></figure>
+<p><code>-d -t</code> 意为后台运行，并且分配一个伪终端，不会占用前台终端，<code>--privileged=true</code> 则表示我们需要允许在容器内运行诸如 <code>apt</code> 等需要管理员权限的命令。<br>我们可以使用 <code>docker ps</code> 命令来查看容器的状态。</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/Pasted%20image%2020260708153845.png"/></div></div>
+<p>如果我们需要进入到该容器中执行命令，我们可以运行：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it hdu-sd-tools /bin/bash</span><br></pre></td></tr></table></figure>
+<p>我们可以看到我们已经进入到了 Debian 容器的 <code>bash</code> 环境中：<br>尝试更新软件包 <code>apt update</code>：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/Pasted%20image%2020260708154335.png"/></div></div>
+<p>运行 <code>apt install fastfetch</code> 安装系统信息查看软件。我们可以看到可以正常展示相应的系统信息。</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/Pasted%20image%2020260708154454.png"/></div></div>
+<h3 id="2、Docker-容器的网络"><a href="#2、Docker-容器的网络" class="headerlink" title="2、Docker 容器的网络"></a>2、<code>Docker</code> 容器的网络</h3><p>我们首先安装一些网络相关的软件。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install net-tools iputils-ping</span><br></pre></td></tr></table></figure>
+<p>测试一下是否可以联通外部网络：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ifconfig</span><br><span class="line">ping 1.1.1.1</span><br></pre></td></tr></table></figure>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/Pasted%20image%2020260708155040.png"/></div></div>
+<h2 id="三、SSH-实验"><a href="#三、SSH-实验" class="headerlink" title="三、SSH 实验"></a>三、SSH 实验</h2><h3 id="1、配置-ssh-服务器"><a href="#1、配置-ssh-服务器" class="headerlink" title="1、配置 ssh 服务器"></a>1、配置 ssh 服务器</h3><p>我们首先安装 ssh 服务器并启动之。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt install openssh-server</span><br><span class="line">service ssh start</span><br></pre></td></tr></table></figure>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/Pasted%20image%2020260708184525.png"/></div></div>
+<p>接着，我们设置 root 用户的密码。密码输入过程中不会显示。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">passwd root</span><br></pre></td></tr></table></figure>
+<p>由于是测试环境，且未暴露端口，笔者直接使用 <code>Test_123456</code> 作为密码，<strong>在生产环境中切记需要使用强密码或者直接采用 ssh 密钥认证的形式登录</strong>。<br>配置 ssh 密钥的方法与前文中配置 <code>git</code> 的 ssh 密钥形式相同，需要将本地系统的 ssh 公钥添加到远程系统的 <code>~/.ssh/authorized_keys</code> 中，使远端系统信任客户端。<br><strong>同样的，ssh 默认监听的 22 端口也有被扫描爆破的可能，在生产环境中也需要更换 ssh 端口来方式爆破。</strong><br>因为我们直接使用 root 登录，我们还需要修改 <code>/etc/ssh/sshd_config</code> 文件来允许登录。<br>首先安装 <code>vim</code> 编辑器。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install vim</span><br></pre></td></tr></table></figure>
+<p>接着编辑文件。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure>
+<p>我们需要做如下修改。</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/Pasted%20image%2020260708190835.png"/></div></div>
+<p>修改完成以后，我们需要重启 ssh 服务。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service ssh restart</span><br></pre></td></tr></table></figure>
+<p>至此，我们的服务端配置完成。</p>
+<h3 id="2、建立-ssh-连接"><a href="#2、建立-ssh-连接" class="headerlink" title="2、建立 ssh 连接"></a>2、建立 ssh 连接</h3><p>需要注意的是，Docker 容器的网络与宿主机的网络在默认的 Bridge 模式下做了严格的隔离措施，不经过端口映射的容器无法被宿主机直接访问。只有容器之间可以互相访问，我们再新建一个相同的容器。<br>安装软件：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br><span class="line">apt install net-tools openssh-client</span><br></pre></td></tr></table></figure>
+<p>我们不妨对两个容器的网络环境进行对比：<br><strong>这是运行了 <code>openssh-server</code> 的服务器</strong></p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/Pasted%20image%2020260708185518.png"/></div></div>
+<p><strong>这是运行了 <code>openssh-client</code> 的客户端</strong></p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/Pasted%20image%2020260708185552.png"/></div></div>
+<p>我们可以看到服务器的 IP 为 <code>172.17.0.2</code> 客户端的 IP 为 <code>172.17.0.3</code>。<br>下面我们尝试连接。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh root@172.17.0.2</span><br></pre></td></tr></table></figure>
+<p>首次连接需要验证指纹。</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/Pasted%20image%2020260708190129.png"/></div></div>
+<p>输入密码，连接成功。</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/Pasted%20image%2020260708191117.png"/></div></div>
+<p>ssh的配置与测试完成。</p>
+<h3 id="3、文件传输"><a href="#3、文件传输" class="headerlink" title="3、文件传输"></a>3、文件传输</h3><h4 id="（1）使用-SCP-传输文件"><a href="#（1）使用-SCP-传输文件" class="headerlink" title="（1）使用 SCP 传输文件"></a>（1）使用 SCP 传输文件</h4><p>创建一个目录和文档：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> secrets</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Will you be in a band with me, forever?&quot;</span> &gt;&gt; secrets/forever</span><br></pre></td></tr></table></figure>
+<p>我们使用 <code>-r</code> 参数传输目录。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -r secrets root@172.17.0.3:/</span><br></pre></td></tr></table></figure>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/Pasted%20image%2020260709172534.png"/></div></div>
+<h4 id="（2）使用-rsync-同步文件"><a href="#（2）使用-rsync-同步文件" class="headerlink" title="（2）使用 rsync 同步文件"></a>（2）使用 rsync 同步文件</h4><p>我们先在两台虚拟机中安装 <code>rsync</code>。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install rsync</span><br></pre></td></tr></table></figure>
+<p>同样的，我们创建一个目录用于同步。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> archive</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Tomori&quot;</span> &gt;&gt; archive/tomori &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;Rana&quot;</span> &gt;&gt; archive/rana</span><br></pre></td></tr></table></figure>
+<p>可以看到被成功同步。</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/Pasted%20image%2020260709173929.png"/></div></div></div><div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a>许可协议，转载请注明出处。</p>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" id="copy-link" readOnly="" value="https://assignment.akn.moe/2026/07/10/part2/"/></div><div class="social-wrap dis-select"><a class="social share-item wechat on-click-event" data-on-click="util.toggle(&#x27;qrcode-wechat&#x27;);"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/wechat.svg" alt="wechat"/></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?title=第二部分 虚拟机与 ssh - 软件开发工具实践&amp;url=https://assignment.akn.moe/2026/07/10/part2/&amp;searchPic=false&amp;style=simple&amp;summary=一、知识储备1、虚拟机与 Docker虚拟机（VM）和 Docker（容器化技术）是目前最主流的两种架构隔离技术。它们最核心的区别在于隔离的层次不同：虚拟机是在硬件层面进行虚拟化，而 Docker 是在操作系统层面进行隔离，其优缺点如..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/weibo.svg" alt="weibo"/></a><a class="social share-item telegram" target="_blank" rel="external nofollow noopener noreferrer" href="https://t.me/share/url?url=https%3A%2F%2Fassignment.akn.moe%2F2026%2F07%2F10%2Fpart2%2F&amp;text=**%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%20%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%8E%20ssh%20-%20%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E5%AE%9E%E8%B7%B5**%0a%E4%B8%80%E3%80%81%E7%9F%A5%E8%AF%86%E5%82%A8%E5%A4%871%E3%80%81%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%8E%20Docker%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%88VM%EF%BC%89%E5%92%8C%20Docker%EF%BC%88%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E6%9C%AF%EF%BC%89%E6%98%AF%E7%9B%AE%E5%89%8D%E6%9C%80%E4%B8%BB%E6%B5%81%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%9E%B6%E6%9E%84%E9%9A%94%E7%A6%BB%E6%8A%80%E6%9C%AF%E3%80%82%E5%AE%83%E4%BB%AC%E6%9C%80%E6%A0%B8%E5%BF%83%E7%9A%84%E5%8C%BA%E5%88%AB%E5%9C%A8%E4%BA%8E%E9%9A%94%E7%A6%BB%E7%9A%84%E5%B1%82%E6%AC%A1%E4%B8%8D%E5%90%8C%EF%BC%9A%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%98%AF%E5%9C%A8%E7%A1%AC%E4%BB%B6%E5%B1%82%E9%9D%A2%E8%BF%9B%E8%A1%8C%E8%99%9A%E6%8B%9F%E5%8C%96%EF%BC%8C%E8%80%8C%20Docker%20%E6%98%AF%E5%9C%A8%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%B1%82%E9%9D%A2%E8%BF%9B%E8%A1%8C%E9%9A%94%E7%A6%BB%EF%BC%8C%E5%85%B6%E4%BC%98%E7%BC%BA%E7%82%B9%E5%A6%82..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/telegram.svg" alt="telegram"/></a><a class="social share-item email" href="mailto:?subject=第二部分 虚拟机与 ssh - 软件开发工具实践&amp;body=一、知识储备1、虚拟机与 Docker虚拟机（VM）和 Docker（容器化技术）是目前最主流的两种架构隔离技术。它们最核心的区别在于隔离的层次不同：虚拟机是在硬件层面进行虚拟化，而 Docker 是在操作系统层面进行隔离，其优缺点如... https://assignment.akn.moe/2026/07/10/part2/"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/email.svg" alt="email"/></a><a class="social share-item link on-click-event" data-on-click="util.copy(&#x27;copy-link&#x27;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/images/link_icon.svg" alt="link"/></a></div><div class="qrcode" id="qrcode-wechat" style="visibility:hidden;height:0"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&amp;data=https://assignment.akn.moe/2026/07/10/part2/" alt="qrcode-wechat"/></div></div></section></div></article><div class="related-wrap reveal" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2026/07/10/part3/">第三部分 Linux 基础使用和配置</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2026/07/10/part1/">第一部分 Web 运行环境、项目与代码库配置</a></div></section></div></div><footer class="page-footer reveal fs12"><hr/><div class="text"><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<p>本站由 <a href="https://assignment.akn.moe/">@arkerny</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/chiyuki0325/hexo-theme-stellaris">Stellaris</a> 作为主题，您可以在 <a target="_blank" rel="noopener" href="https://github.com/arkerny/HDU-SD-Tools-Assignment">https://github.com/arkerny/HDU-SD-Tools-Assignment</a> 找到本站源码。</p>
+<div>由 <a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a> 强力驱动</div><p>本站由 <a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://files.seeusercontent.com/2026/02/14/M5kz/ae09871.png" style="vertical-align:text-bottom;height:20px"/></a> 提供 CDN 加速 / 云存储服务</p></div></footer><div class="float-panel mobile-only blur" style="display:none"><button type="button" class="sidebar-toggle mobile on-click-event" id="toggle-sidebar" data-on-click="sidebar.toggle();"><svg class="icon" style="width:1em;height:1em;vertical-align:middle;fill:currentColor;overflow:hidden" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg></button></div></div></div><div class="scripts"><script src="https://fastly.jsdelivr.net/npm/instantclick@3.1.0/instantclick.min.js" data-no-instant="true"></script><script data-no-instant="true" type="text/javascript">InstantClick.init();</script><script type="text/javascript">
+      stellar = {
+        root: '/',
+        // 懒加载 css https://github.com/filamentgroup/loadCSS
+        loadCSS: (href, before, media, attributes) => {
+          var doc = window.document;
+          var ss = doc.createElement("link");
+          var ref;
+          if (before) {
+            ref = before;
+          } else {
+            var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+            ref = refs[refs.length - 1];
+          }
+          var sheets = doc.styleSheets;
+          if (attributes) {
+            for (var attributeName in attributes) {
+              if (attributes.hasOwnProperty(attributeName)) {
+                ss.setAttribute(attributeName, attributes[attributeName]);
+              }
+            }
+          }
+          ss.rel = "stylesheet";
+          ss.href = href;
+          ss.media = "only x";
+          function ready(cb) {
+            if (doc.body) {
+              return cb();
+            }
+            setTimeout(function () {
+              ready(cb);
+            });
+          }
+          ready(function () {
+            ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+          });
+          var onloadcssdefined = function (cb) {
+            var resolvedHref = ss.href;
+            var i = sheets.length;
+            while (i--) {
+              if (sheets[i].href === resolvedHref) {
+                return cb();
+              }
+            }
+            setTimeout(function () {
+              onloadcssdefined(cb);
+            });
+          };
+          function loadCB() {
+            if (ss.addEventListener) {
+              ss.removeEventListener("load", loadCB);
+            }
+            ss.media = media || "all";
+          }
+          if (ss.addEventListener) {
+            ss.addEventListener("load", loadCB);
+          }
+          ss.onloadcssdefined = onloadcssdefined;
+          onloadcssdefined(loadCB);
+          return ss;
+        },
+        // 从 butterfly 和 volantis 获得灵感
+        loadScript: (src, opt) => new Promise((resolve, reject) => {
+          var script = document.createElement('script');
+          script.src = src;
+          if (opt) {
+            for (let key of Object.keys(opt)) {
+              script[key] = opt[key]
+            }
+          } else {
+            // 默认异步，如果需要同步，第二个参数传入 {} 即可
+            script.async = true
+          }
+          script.onerror = reject
+          script.onload = script.onreadystatechange = function() {
+            const loadState = this.readyState
+            if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+            script.onload = script.onreadystatechange = null
+            resolve()
+          }
+          document.head.appendChild(script)
+        }),
+    
+        // https://github.com/jerryc127/hexo-theme-butterfly
+        jQuery: fn => stellaris.jQuery(fn)
+      };
+      stellar.github = 'https://github.com/chiyuki0325/hexo-theme-stellaris';
+      stellar.config = {
+        date_suffix: {
+          just: '刚刚',
+          min: '分钟前',
+          hour: '小时前',
+          day: '天前',
+          month: '个月前',
+        },
+      };
+    
+      stellar.plugins = Object.assign({"jQuery":"https://fastly.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js","stellar":{"sites":"/js/plugins/sites.js","friends":"/js/plugins/friends.js","ghinfo":"/js/plugins/ghinfo.js","timeline":"/js/plugins/timeline.js","linkcard":"/js/plugins/linkcard.js","fcircle":"/js/plugins/fcircle.js","bvideo":"/js/plugins/bvideo.js"},"marked":"https://fastly.jsdelivr.net/npm/marked@4.0.2/marked.min.js","instant_click":{"js":"https://fastly.jsdelivr.net/npm/instantclick@3.1.0/instantclick.min.js"},"lazyload":{"enabled":true,"js":"https://fastly.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"fade"},"swiper":{"enabled":true,"css":"https://fastly.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css","js":"https://fastly.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"},"fancybox":{"enabled":true,"js":"https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://fastly.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img, .vcontent img:not(.vemoji), .tag-plugin.image img"}})
+      stellar.tag_plugins = Object.assign({"bvideo":{"enabled":true,"image_proxy":"https://stellaris-api.chyk.ink/bilibili/?url=","video_info":"https://stellaris-api.chyk.ink/bvideo_info/"}})
+      stellar.search = Object.assign({"service":"local_search","js":"/js/search/local_search.js","path":"/search.json"})
+
+      stellar.article = {
+        outdate_month: 12
+      };
+    </script><script src="/js/main.js" type="text/javascript" data-no-instant="true"></script><script type="text/javascript" src="/js/check_outdated_browser.js" data-no-instant="true"></script></div></body></html>
